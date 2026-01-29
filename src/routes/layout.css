@@ -1,18 +1,28 @@
 @import 'tailwindcss';
 
 @theme {
-	--color-abx-green: #00d395;
-	--color-abx-dark: #0a0a0a;
-	--color-abx-card: #141414;
-	--color-abx-border: #262626;
-	--color-class-vanguard: #c2410c;
-	--color-class-harvester: #ca8a04;
-	--color-class-alchemist: #15803d;
-	--color-class-merchant: #7c3aed;
-	--color-class-polymath: #0891b2;
-	--color-class-observer: #525252;
+	/* Page colors (from Figma) */
+	--color-abx-bg: #0f0f0e;
+	--color-abx-card: #252729;
+	--color-abx-border: #414447;
+	--color-abx-green: #4bda8b;
+	--color-abx-red: #ff5b5b;
+	--color-abx-muted: #a5a5a5;
+
+	/* Strategy colors (from Figma) */
+	--color-class-foundation: #8d82ff;
+	--color-class-polymath: #41ceed;
+	--color-class-vanguard: #ffaa4f;
+	--color-class-harvester: #ff628c;
+	--color-class-alchemist: #4bda8b;
+	--color-class-merchant: #de78e3;
+	--color-class-observer: #cbbbaf;
+
+	/* Font families */
+	--font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+	--font-mono: 'Geist Mono', ui-monospace, monospace;
 }
 
 body {
-	@apply bg-abx-dark text-white antialiased;
+	@apply bg-abx-bg text-white antialiased font-sans;
 }
