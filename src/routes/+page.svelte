@@ -31,7 +31,9 @@
 		veabxPower: number;
 		percentOfTotal: number;
 		numLocks: number;
+		numLocksVaulted: number;
 		isFoundation: boolean;
+		accruedRewards: number;
 	}
 
 	interface HoldersResponse {

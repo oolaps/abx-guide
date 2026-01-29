@@ -10,7 +10,9 @@
 		veabxPower: number;
 		percentOfTotal: number;
 		numLocks: number;
+		numLocksVaulted: number;
 		isFoundation: boolean;
+		accruedRewards: number;
 	}
 
 	interface Props {
@@ -67,10 +69,12 @@
 				<tr class="border-b border-abx-border text-left text-xs font-medium uppercase tracking-wider text-abx-muted">
 					<th class="px-4 py-3">Rank</th>
 					<th class="px-4 py-3">Wallet</th>
-					<th class="px-4 py-3 text-right">veABX</th>
-					<th class="hidden px-4 py-3 text-right sm:table-cell">Of Total</th>
-					<th class="hidden px-4 py-3 text-right md:table-cell">Locks</th>
-					<th class="hidden px-4 py-3 lg:table-cell">Strategy</th>
+					<th class="px-4 py-3 text-right">Current</th>
+					<th class="hidden px-4 py-3 text-right sm:table-cell">Pending</th>
+					<th class="px-4 py-3 text-right">Total veABX</th>
+					<th class="hidden px-4 py-3 text-right md:table-cell">Of Total</th>
+					<th class="hidden px-4 py-3 text-right lg:table-cell">Locks</th>
+					<th class="hidden px-4 py-3 xl:table-cell">Strategy</th>
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-abx-border">
@@ -84,27 +88,35 @@
 								<div class="h-5 w-32 animate-pulse rounded bg-white/10"></div>
 							</td>
 							<td class="px-4 py-3 text-right">
-								<div class="ml-auto h-5 w-20 animate-pulse rounded bg-white/10"></div>
+								<div class="ml-auto h-5 w-16 animate-pulse rounded bg-white/10"></div>
 							</td>
 							<td class="hidden px-4 py-3 text-right sm:table-cell">
-								<div class="ml-auto h-5 w-12 animate-pulse rounded bg-white/10"></div>
+								<div class="ml-auto h-5 w-14 animate-pulse rounded bg-white/10"></div>
+							</td>
+							<td class="px-4 py-3 text-right">
+								<div class="ml-auto h-5 w-16 animate-pulse rounded bg-white/10"></div>
 							</td>
 							<td class="hidden px-4 py-3 text-right md:table-cell">
+								<div class="ml-auto h-5 w-12 animate-pulse rounded bg-white/10"></div>
+							</td>
+							<td class="hidden px-4 py-3 text-right lg:table-cell">
 								<div class="ml-auto h-5 w-8 animate-pulse rounded bg-white/10"></div>
 							</td>
-							<td class="hidden px-4 py-3 lg:table-cell">
+							<td class="hidden px-4 py-3 xl:table-cell">
 								<div class="h-5 w-20 animate-pulse rounded bg-white/10"></div>
 							</td>
 						</tr>
 					{/each}
 				{:else if holders.length === 0}
 					<tr>
-						<td colspan="6" class="px-4 py-8 text-center text-abx-muted">
+						<td colspan="8" class="px-4 py-8 text-center text-abx-muted">
 							No holders found
 						</td>
 					</tr>
 				{:else}
 					{#each holders as holder}
+						{@const pending = holder.accruedRewards ?? 0}
+						{@const totalVeABX = holder.veabxPower + pending}
 						<tr class="transition-colors hover:bg-white/5 {holder.isFoundation ? 'bg-class-foundation/5' : ''}">
 							<td class="px-4 py-3">
 								<span class="font-mono text-sm {holder.isFoundation ? 'text-class-foundation' : 'text-abx-muted'}">
@@ -138,16 +150,33 @@
 								</span>
 							</td>
 							<td class="hidden px-4 py-3 text-right sm:table-cell">
-								<span class="text-sm text-abx-muted">
-									{formatPercent(holder.percentOfTotal, 2)}
+								{#if pending > 0}
+									<span class="font-mono text-sm text-abx-green">
+										+{formatVeABX(pending)}
+									</span>
+								{:else}
+									<span class="font-mono text-sm text-abx-muted">—</span>
+								{/if}
+							</td>
+							<td class="px-4 py-3 text-right">
+								<span class="font-mono text-sm font-medium text-white">
+									{formatVeABX(totalVeABX)}
 								</span>
 							</td>
 							<td class="hidden px-4 py-3 text-right md:table-cell">
 								<span class="text-sm text-abx-muted">
-									{holder.numLocks}
+									{formatPercent(holder.percentOfTotal, 2)}
 								</span>
 							</td>
-							<td class="hidden px-4 py-3 lg:table-cell">
+							<td class="hidden px-4 py-3 text-right lg:table-cell">
+								<span class="text-sm text-abx-muted">
+									{holder.numLocks}
+									{#if (holder.numLocksVaulted ?? 0) > 0}
+										<span class="text-abx-green">({holder.numLocksVaulted})</span>
+									{/if}
+								</span>
+							</td>
+							<td class="hidden px-4 py-3 xl:table-cell">
 								<StrategyBadge strategy={getStrategy(holder)} />
 							</td>
 						</tr>
